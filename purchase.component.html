@@ -1,0 +1,1734 @@
+
+<div class="container-fluid">
+
+    <div class="eas-border-radius-0 bg-primary inner-header text-light nav-wrapper" 
+    >
+    <div class="flex-row-back" >
+        <a (click)="location.back()" class="nav-item-back" >
+            <i class="fa-solid fa-arrow-left"></i></a>
+        <h5 class="text-right my-2">Add New Purchase </h5>
+    </div>
+    <div class="flex-row">
+        <button class="btn btn-labeled btn-light border-0 my-2" 
+        (click)="Save()" >
+ <span class="btn-label">
+    <i class="fa-solid fa-floppy-disk"></i>
+</span>{{pmid ? "Update" : "Save"}}</button>
+    </div>
+     
+  </div>
+
+  <!-- BNID======0 -->
+    <ng-container *ngIf="bnid===0">
+<div class="card shadow border-0">
+        
+        <div class="card-body">
+            <div class="row g-1">
+                <div class="col-2 col-md">
+                    <div class="form-group">
+                        <label>ID</label>
+                        <input type="number" class="form-control shadow" [(ngModel)]="purchase.pMid" disabled>
+                    </div>
+                </div>
+                <div class="col-4 col-md">
+                    <div class="form-group">
+                        <label>Bill No.</label>
+                        <input type="text" class="form-control shadow" 
+                        [(ngModel)]="purchase.billNo">
+                    </div>
+                </div>
+                <div class="col-6 col-md">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="form-control shadow"
+                         [(ngModel)]="eDate">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row g-2 mt-2">
+                <div class="col-md">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="floatingInputGrid">Party</label>
+                        </div>
+                        <div class="col-6 text-right ">
+                            <h6 class="text-success mt-1">{{payable}}</h6>
+                        </div>
+                    </div>
+                    <ng-select 
+                        [items]="partyArr" 
+                        bindLabel="customerName" 
+                        bindValue="customerID"
+                        [(ngModel)]="purchase.sAccID" 
+                        (change)="changeParty($event)" 
+                        required>
+                    </ng-select>
+                    
+                </div>
+                <div class="col-4 col-md">
+                    <div class="form-group">
+                        <label>Bilty No.</label>
+                        <input type="text" 
+                        class="form-control shadow" 
+                        [(ngModel)]="purchase.biltyNo">
+                    </div>
+                </div>
+                <div class="col-4 col-md">
+                    <div class="form-group">
+                        <label>Goods</label>
+                        <input type="text" class="form-control shadow" [(ngModel)]="purchase.goods">
+                    </div>
+                </div>
+                <div class="col-4 col-md">
+                    <div class="form-group">
+                        <label>Pandi</label>
+                        <input type="text" class="form-control shadow" [(ngModel)]="purchase.pandi">
+                    </div>
+                </div>
+                <div class="col-md" hidden>
+                    <div class="form-group">
+                        <label>Bilty Expenses</label>
+                        <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyExp">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-2 mt-2">
+                <div class="col-md-4 col-8">
+                    <label>Item</label>
+                    <ng-select 
+                    [items]="itemsArr" 
+                    bindLabel="itemDescription" 
+                    bindValue="itemID" 
+                    [(ngModel)]="_pSub.itemID"
+                    (change)="changeItem($event)" 
+                    required 
+                    [searchFn]="customSearchFn"
+                    #select
+                    >
+                    </ng-select>
+                </div>
+                <div class="col-4 col-md text-center">
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <ng-select
+                        [items]="unitArr"
+                        bindLabel="mUnit"
+                        bindValue="unitId"
+                        [(ngModel)]="_pSub.measureId"
+                        (change)="onChangeUnit($event)"
+                        >
+
+                        </ng-select>
+                        <!-- <input type="text" class="form-control shadow grid-input" 
+                        [(ngModel)]="itemUnit" 
+                        disabled> -->
+                    </div>
+                </div>
+                <div class="col-4 col-md  text-center">
+                    <div class="form-group">
+                        <label>Qty</label>
+                        <input type="number" class="form-control shadow grid-input" 
+                        [(ngModel)]="_pSub.packet">
+                    </div>
+                </div>
+                <div class="col-4 col-md  text-center">
+                    <div class="form-group">
+                        <label>Rate</label>
+                        <input type="number" class="form-control shadow grid-input"
+                        [(ngModel)]="_pSub.purchaseRate">
+                    </div>
+                </div>
+               
+                <div class="col-4 col-md text-center">
+                    <div class="from-group">
+                        <label>Dis %</label>
+                        <input type="number" 
+                        class="form-control shadow grid-input" 
+                        [(ngModel)]="_pSub.disPer">
+                    </div>
+                </div>
+                 <div class="col-md col-4">
+                    <label>P.Type</label>
+                    <ng-select 
+                    [items]="ST" 
+                    bindLabel="pType" 
+                    bindValue="pTypeId" 
+                   [(ngModel)]="_pSub.pTypeId"
+                   
+                    required>
+                    <!-- <ng-option *ngFor="">
+                        
+                    </ng-option> -->
+                    </ng-select>
+
+
+                </div> 
+                 <div class="col-md col-4">
+                    <label>Warehouse</label>
+                    <ng-select 
+                    [items]="goArr" 
+                    bindLabel="goName" 
+                    bindValue="cId" 
+                   [(ngModel)]="_pSub.n1"
+                   (change)="onChageGodown($event)"
+                    required>
+                    <!-- <ng-option *ngFor="">
+                        
+                    </ng-option> -->
+                    </ng-select>
+
+
+                </div> 
+                <div class="col-4 col-md float-right mr-0">
+                    <button class="btn btn-primary btn-block eas-border-radius-0"
+                     (click)="addSmallLine()" style="padding: 10px 40px; margin-top: 21px">Add</button>
+                </div>
+            </div>
+            <div class="row mt-3">
+
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-8">
+                    <div class="card border-0 shadow">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Qty</th>
+                                        <th>T.Qty</th>
+                                        <th>Rate</th>
+                                        <th>Dis %</th>
+                                        <!-- <th>Total Dis</th> -->
+                                        <th>Amount</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let a of purchase.purchasesDetail"
+                                    [style.background]="a.pTypeId ===1 ? '#E9FCEA  ':'#FCE9E9'"
+                                    >
+                                        <td>{{a.itemDescription}}</td>
+                                        <td>{{a.packet}}</td>
+                                        <td>{{a.qty}}</td>
+                                        <td>{{a.purchaseRate}}</td>
+                                        <td>{{a.disPer}}</td>
+                                        <!-- <td>{{totalDisc}}</td> -->
+                                        <td>{{a.amount}}</td> 
+                                          
+                                        <td class="text-right">
+                                            <a class="text-primary mx-2"
+                                            (click)="editLine(a)"
+                                            >
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                          </a>
+                                          <a class="text-danger mx-2"
+                                          (click)="DeleteLine(a)"
+                                          >
+                                                   <i class="fa-regular fa-trash-can"></i>
+                                          </a>
+                                         
+                                         
+                                        </td>
+                  
+       
+                                  
+                                    
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-4 ">
+                    <div class="card border-0 shadow p-3">
+                        <div class="row">
+                            <div class="col-md col-4">
+                                <div class="form-group">
+                                    <label>Total Purchase</label>
+                                    <input type="number" 
+                                    class="form-control shadow" 
+                                    [(ngModel)]="purchase.gSale" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md col-4">
+                                <div class="form-group">
+                                    <label>Total Return</label>
+                                    <input type="number" 
+                                    class="form-control shadow" 
+                                    disabled
+                                    [(ngModel)]="purchase.sReturn"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-md col-4">
+                                <div class="form-group">
+                                    <label>Gross Amount</label>
+                                    <input type="number" 
+                                    class="form-control shadow" 
+                                    [ngModel]="grossBill" disabled>
+                                </div>
+                            </div>
+                        </div> 
+                        <!-- <div class="row" >
+                            <div class="form-group">
+                                <label>Return Amount</label>
+                                <input type="number" class="form-control" [(ngModel)]="retSum">
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md col-4">
+                                
+                                    <div class="form-group">
+                                        <label>Discount</label>
+                                        <input type="number" 
+                                        class="form-control shadow" 
+                                        [(ngModel)]="purchase.discountUser" 
+                                        (keyup)="cashReceived($event)">
+                                   
+    
+                                </div>
+                            </div>
+                            <div class="col-md col-4">
+                                <div class="form-group">
+                                    <label>Cash Paid</label>
+                                    <input type="number" 
+                                    class="form-control shadow"
+                                    [(ngModel)]="purchase.cashPay" 
+                                    (keyup)="cashReceived($event)"
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-md col-4">
+                                <div class="form-group">
+                                    <label>Net Bill</label>
+                                    <input type="number" 
+                                    class="form-control shadow"
+                                    [(ngModel)]="netBill">
+                                </div>
+                            </div>
+                           
+                            
+                        </div>
+                        
+                        <!-- <div class="row">
+                            <div class="form-group">
+                                <label>Net Bill</label>
+                                <input type="number" class="form-control" >
+                            </div>
+                        </div> -->
+                        <div class="row g-2">
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label>Remarks</label>
+                                    <input type="text"
+                                    class="form-control shadow" 
+                                    [(ngModel)]="purchase.remarks">
+                                </div>
+            
+                            </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-12"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </ng-container>
+
+    <ng-container *ngIf="bnid===1">
+        <div class="card shadow border-0">
+            <div class="card-head">
+                <div class="d-flex">
+                    <i class="zmdi zmdi-long-arrow-left" (click)="back()"></i>
+                </div>
+                <h2 class="text-center text-success">Creat New Purchase</h2>
+            </div>
+            <div class="card-body">
+                <div class="row g-2 mt-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.pMid" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Bill No.</label>
+                            <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.billNo">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="mat-form form-control shadow bg-white rounded"
+                             [(ngModel)]="eDate">
+                        </div>
+    
+                    </div>
+    
+                </div>
+                <div class="row g-2 mt-2">
+                    <div class="col-md">
+                        <label for="floatingInputGrid">Party</label>
+                        <ng-select [items]="partyArr" bindLabel="customerName" bindValue="customerID"
+                            [(ngModel)]="purchase.sAccID" (change)="changeParty($event)" required>
+                        </ng-select>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Bilty No.</label>
+                            <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyNo">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Goods</label>
+                            <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.goods">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Pandi</label>
+                            <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.pandi">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Bilty Expenses</label>
+                            <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyExp">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Remarks</label>
+                            <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.remarks">
+                        </div>
+    
+                    </div>
+                </div>
+                <div class="row g-2 mt-2">
+                    <div class="col-md-4">
+                        <label>Item</label>
+                        <ng-select [items]="itemsArr" bindLabel="itemDescription" 
+                        bindValue="itemID" [(ngModel)]="_pSub.itemID"
+                            (change)="changeItem($event)" required 
+                            [searchFn]="customSearchFn" #select
+                            >
+                        </ng-select>
+                    </div>
+                    
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Unit</label>
+                            <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.measureUnit" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Rate</label>
+                            <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.purchaseRate">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label>Qty</label>
+                            <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.qty">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="from-group">
+                            <label>Discount%</label>
+                            <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.disPer">
+                        </div>
+                    </div>
+                     <div class="col-md">
+                        <label>Purchase Type</label>
+                        <ng-select 
+                        [items]="ST" 
+                        bindLabel="pType" 
+                        bindValue="pTypeId" 
+                       [(ngModel)]="_pSub.pTypeId"
+                       
+                        required>
+                      
+                        </ng-select>
+    
+    
+                    </div> 
+                    <div class="col-sm-1 float-right mr-0">
+                        <button class="btn-act btn-primary btn-block"
+                        
+                        
+                        (click)="bnid===1 ? addLine() : addSmallLine()" style="padding: 20px 40px;">Add</button>
+                    </div>
+                </div>
+                <div class="row mt-3">
+    
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-8">
+                        <div class="card border-0 shadow">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 35%;">Item Name</th>
+                                            <th style="width: 10%;">Qty</th>
+                                            <th style="width: 10%;">Rate</th>
+                                            <th style="width: 10%;">Amount</th>
+                                            <th style="width: 10%;">Discount</th>
+                                            <th style="width: 10%;">Type</th>
+                                            <th style="width: 15%; text-align: right;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let a of purchase.purchasesDetail">
+                                            <td style="width: 35%;">{{a.itemDescription}}</td>
+                                            <td style="width: 10%;">{{a.qty}}</td>
+                                            <td style="width: 10%;">{{a.purchaseRate}}</td>
+                                            <td style="width: 10%;">{{a.qty*a.purchaseRate-
+                                                (a.qty*a.purchaseRate*a.disPer/100)}}</td> 
+                                              
+                                            <td style="width: 10%;">{{a.disPer!=0 ? a.disPer : a.disRs}} {{a.disper!==0 ? "%" : "Rs"}}</td>
+                                            <td style="width: 10%;">{{a.pType}}</td>
+                                            <td style="width: 15%; " class="text-right">
+                                                <div class="btn-group" style="width:100%">
+                                                   
+                                                    <button class="btn-act btn-primary" (click)="editLine(a)">
+                                                        <img src="./assets/imgs/wedit.svg" height="25px" width="25px"
+                                                            alt="">
+                                                    </button>
+                                                
+                                                    <button href="" class="btn-act btn-danger" 
+                                                    (click)="DeleteLine(a)">
+                                                        <img src="./assets/imgs/wdel.svg" height="25px" width="25px" alt="">
+                                                    </button>
+                                                </div>
+                                            </td>
+    
+    
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+    
+                        </div>
+                    </div>
+                    <div class="col-sm-4 ">
+                        <div class="card border-0 shadow p-3">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Cash Paid</label>
+                                    <input type="number" 
+                                    class="mat-form form-control shadow bg-white rounded" 
+                                    [(ngModel)]="purchase.cashPay" (keyup)="cashReceived($event)">
+                                </div>
+                            </div> 
+                           
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Total Bill</label>
+                                    <input type="number" 
+                                    class="mat-form form-control shadow bg-white rounded"
+                                     [(ngModel)]="purchase.gSale">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Total Return</label>
+                                    <input type="number" 
+                                    class="mat-form form-control shadow bg-white rounded"
+                                     [(ngModel)]="purchase.sReturn">
+                                </div>
+                            </div>
+                             <div class="row" >
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label>Discount</label>
+                                        <input type="number" 
+                                        class="mat-form form-control shadow bg-white rounded" 
+                                        [(ngModel)]="purchase.discountUser" (keyup)="cashReceived($event)">
+                                    </div>
+    
+                                </div>
+                                
+                            </div> 
+                           <div class="row">
+                                <div class="form-group">
+                                    <label>Net Bill</label>
+                                    <input type="number" 
+                                    class="mat-form form-control shadow bg-white rounded" 
+                                    [ngModel]="netBill">
+                                </div>
+                            </div> 
+                       
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- BNID ==== 1 -->
+    <!-- <ng-container *ngIf="bnid===1">
+        <div class="card shadow border-0">
+        <div class="card-head">
+            <div class="d-flex">
+                <i class="zmdi zmdi-long-arrow-left" (click)="back()"></i>
+            </div>
+            <h2 class="text-center text-success">Creat New Purchase With Lot </h2>
+        </div>
+        <div class="card-body">
+            <div class="row g-2 mt-2">
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>ID</label>
+                        <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.pMid" disabled>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Bill No.</label>
+                        <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.billNo">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="mat-form form-control shadow bg-white rounded"
+                         [(ngModel)]="eDate">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row g-2 mt-2">
+                <div class="col-md">
+                    <label for="floatingInputGrid">Party</label>
+                    <ng-select [items]="partyArr" bindLabel="customerName" bindValue="customerID"
+                        [(ngModel)]="purchase.sAccID" (change)="changeParty($event)" required>
+                    </ng-select>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Bilty No.</label>
+                        <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyNo">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Goods</label>
+                        <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.goods">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Pandi</label>
+                        <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.pandi">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Bilty Expenses</label>
+                        <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyExp">
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.remarks">
+                    </div>
+
+                </div>
+            </div>
+            <div class="row g-2 mt-2">
+                <div class="col-md-4">
+                    <label>Item</label>
+                    <ng-select [items]="itemsArr" bindLabel="itemDescription" 
+                    bindValue="itemID" [(ngModel)]="_pSub.itemID"
+                        (change)="changeItem($event)" required 
+                        [searchFn]="customSearchFn" #select
+                        >
+                    </ng-select>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Lot No</label>
+                        <input type="text" class="mat-form form-control shadow bg-white rounded"
+                         [(ngModel)]="_pSub.lotNo">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Unit</label>
+                        <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="itemUnit" disabled>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Rate</label>
+                        <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.purchaseRate">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label>Qty</label>
+                        <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.qty">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="from-group">
+                        <label>Discount%</label>
+                        <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.disPer">
+                    </div>
+                </div>
+                 <div class="col-md">
+                    <label>Purchase Type</label>
+                    <ng-select 
+                    [items]="ST" 
+                    bindLabel="pType" 
+                    bindValue="pTypeId" 
+                   [(ngModel)]="_pSub.pTypeId"
+                   
+                    required>
+                  
+                    </ng-select>
+
+
+                </div> 
+                <div class="col-sm-1 float-right mr-0">
+                    <button class="btn-act btn-edit btn-block"
+                     (click)="addSmallLine()" style="padding: 20px 40px;">Add</button>
+                </div>
+            </div>
+            <div class="row mt-3">
+
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-8">
+                    <div class="card border-0 shadow">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Qty</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let a of purchase.purchasesDetail">
+                                        <td>{{a.itemDescription}}</td>
+                                        <td>{{a.qty}}</td>
+                                        <td>{{a.purchaseRate}}</td>
+                                        <td>{{a.qty*a.purchaseRate-
+                                            (a.qty*a.purchaseRate*a.disPer/100)}}</td> 
+                                          
+                                        <td>{{a.pType}}</td>
+                                        <td style="width: 15%;">
+                                            <div class="btn-group" style="width:100%">
+                                               
+                                                <button class="btn-act btn-edit" (click)="editLine(a)">
+                                                    <img src="./assets/imgs/wedit.svg" height="25px" width="25px"
+                                                        alt="">
+                                                </button>
+                                            
+                                                <button href="" class="btn-act btn-del" 
+                                                (click)="DeleteLine(a)">
+                                                    <img src="./assets/imgs/wdel.svg" height="25px" width="25px" alt="">
+                                                </button>
+                                            </div>
+                                        </td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-4 ">
+                    <div class="card border-0 shadow p-3">
+                        <div class="row">
+                            <div class="form-group">
+                                <label>Cash Paid</label>
+                                <input type="number" 
+                                class="mat-form form-control shadow bg-white rounded" 
+                                [(ngModel)]="purchase.cashPay" (keyup)="cashReceived($event)">
+                            </div>
+                        </div> 
+                       
+                        <div class="row">
+                            <div class="form-group">
+                                <label>Total Bill</label>
+                                <input type="number" 
+                                class="mat-form form-control shadow bg-white rounded"
+                                 [(ngModel)]="purchase.gSale">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label>Total Return</label>
+                                <input type="number" 
+                                class="mat-form form-control shadow bg-white rounded"
+                                 [(ngModel)]="purchase.sReturn">
+                            </div>
+                        </div>
+                         <div class="row" >
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label>Discount</label>
+                                    <input type="number" 
+                                    class="mat-form form-control shadow bg-white rounded" 
+                                    [(ngModel)]="purchase.discountUser" (keyup)="cashReceived($event)">
+                                </div>
+
+                            </div>
+                            
+                        </div> 
+                       <div class="row">
+                            <div class="form-group">
+                                <label>Net Bill</label>
+                                <input type="number" 
+                                class="mat-form form-control shadow bg-white rounded" 
+                                [ngModel]="netBill">
+                            </div>
+                        </div> 
+                   
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </ng-container> -->
+
+<!-- BNID 2 -->
+<ng-container *ngIf="bnid===2">
+    <div class="card shadow border-0">
+    <div class="card-head">
+        <div class="d-flex">
+            <i class="zmdi zmdi-long-arrow-left" (click)="back()"></i>
+        </div>
+        <h2 class="text-center text-success">Creat New Purchase</h2>
+    </div>
+    <div class="card-body">
+        <div class="row g-2 mt-2">
+            <div class="col-md">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="number" 
+                    class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="purchase.pMid" disabled>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Bill No.</label>
+                    <input type="text"
+                    class="mat-form form-control shadow bg-white rounded" 
+                    [(ngModel)]="purchase.billNo">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" 
+                    class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="eDate">
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row g-2 mt-2">
+
+            <div class="col-md">
+                 <div class="row">
+                            <div class="col-8">
+                                <label for="floatingInputGrid">Party</label>
+                            </div>
+                            <div class="col-4">
+                                <h6 class="text-right text-success">{{payable}}</h6>
+                            </div>
+                        </div>
+                <ng-select [items]="partyArr" bindLabel="customerName" bindValue="customerID"
+                    [(ngModel)]="purchase.sAccID" (change)="changeParty($event)" required>
+                </ng-select>
+            </div>
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Bilty No.</label>
+                    <input type="text" 
+                    class="mat-form form-control shadow bg-white rounded" 
+                    [(ngModel)]="purchase.biltyNo">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Goods</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.goods">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Pandi</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.pandi">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Bilty Expenses</label>
+                    <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyExp">
+                </div>
+            </div> -->
+        </div>
+        <!-- <div class="row g-2">
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Remarks</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.remarks">
+                </div>
+
+            </div>
+        </div> -->
+        <div class="row g-2 mt-2">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-3">
+                        <label>Item</label>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">L.P.R: {{lpr}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">stock: {{sBal}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">profit: {{iProfit}}</h6>
+                    </div>
+                </div>
+                <ng-select [items]="itemsArr" bindLabel="itemDescription" 
+                bindValue="itemID" [(ngModel)]="_pSub.itemID"
+                    (change)="changeItem($event)" required 
+                    [searchFn]="customSearchFn" #select
+                    >
+                </ng-select>
+            </div>
+            <div class="col-md" style="display: none;">
+                <div class="form-group">
+                    <label>Lot No</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="_pSub.lotNo">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Unit</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="itemUnit" disabled>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Rate</label>
+                    <input type="number" 
+                    class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.purchaseRate">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Qty</label>
+                    <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.qty">
+                </div>
+            </div>
+            <div class="col-md" style="display: none;">
+                <div class="from-group">
+                    <label>Discount%</label>
+                    <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.disPer">
+                </div>
+            </div>
+             <div class="col-md">
+                <label>Purchase Type</label>
+               <select  class="form-select mat-form form-control shadow bg-white rounded" aria-label="Default select example"
+               (change)="changeType($event)" >
+                     <option *ngFor="let type of ST"
+                     >{{type.pType}}</option>
+                  </select>  
+                  <!-- <select >
+                    <option *ngFor="let type of ST" 
+                    
+                   >{{type.pType}}</option>
+                  </select> -->
+                  
+                 <!-- <ng-select 
+                [items]="ST" 
+                bindLabel="pType" 
+                bindValue="pTypeId" 
+               [(ngModel)]="_pSub.pTypeId"
+               [ngValue]="_pSub.pTypeId">
+                </ng-select>  -->
+
+
+            </div> 
+            <div class="col-sm-1 float-right mr-0">
+                <button class="btn btn-primary btn-block"
+                 (click)="addSmallLine()" style="padding: 20px 40px;" [disabled]="!_pSub.itemDescription">Add</button>
+            </div>
+        </div>
+        <div class="row mt-3">
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-8">
+                <div class="card border-0 shadow">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Qty</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let a of purchase.purchasesDetail">
+                                    <td>{{a.itemDescription}}</td>
+                                    <td>{{a.qty}}</td>
+                                    <td>{{a.purchaseRate}}</td>
+                                    <td>{{a.qty*a.purchaseRate-
+                                        (a.qty*a.purchaseRate*a.disPer/100)}}</td> 
+                                      
+                                    <td>{{a.pType}}</td>
+                                    <td style="width: 15%;">
+                                        <div class="btn-group" style="width:100%">
+                                            <!-- EDIT -->
+                                            <button class="btn-act btn-edit" (click)="editLine(a)">
+                                                <img src="./assets/imgs/wedit.svg" height="25px" width="25px"
+                                                    alt="">
+                                            </button>
+                                            <!-- DELETE -->
+                                            <button href="" class="btn-act btn-del" 
+                                            (click)="DeleteLine(a)">
+                                                <img src="./assets/imgs/wdel.svg" height="25px" width="25px" alt="">
+                                            </button>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <div class="card border-0 shadow p-3">
+                    <div class="row">
+                    
+                        <div class="form-group">
+                            <label>Cash Paid</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [(ngModel)]="purchase.cashPay" (keyup)="cashReceived($event)">
+                        </div>
+                    </div> 
+                    <!-- <div class="row" >
+                        <div class="form-group">
+                            <label>Return Amount</label>
+                            <input type="number" class="form-control" [(ngModel)]="retSum">
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Total Bill</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded"
+                             [(ngModel)]="purchase.gSale">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Total Return</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded"
+                             [(ngModel)]="purchase.sReturn">
+                        </div>
+                    </div>
+                     <div class="row" >
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input type="number" 
+                                class="mat-form form-control shadow bg-white rounded" 
+                                [(ngModel)]="purchase.discountUser" (keyup)="cashReceived($event)">
+                            </div>
+
+                        </div>
+                        
+                    </div> 
+                   <div class="row">
+                        <div class="form-group">
+                            <label>Net Bill</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [ngModel]="netBill">
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Bill Profit</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [(ngModel)]="billProfit" disabled>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="form-group">
+                            <label>Net Bill</label>
+                            <input type="number" class="form-control" [(ngModel)]="netBill">
+                        </div>
+                    </div> -->
+                    <!-- <div class="row">
+                        <button class="btn-act btn-edit" (click)="Save()" 
+                        style="margin:0px!important" [disabled]="!purchase.sAccID">Save</button>
+                    </div> -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</ng-container>
+
+<!-- BNID 3 -->
+<ng-container *ngIf="bnid===3">
+    <div class="card shadow border-0">
+    <div class="card-head">
+        <div class="d-flex">
+            <i class="zmdi zmdi-long-arrow-left" (click)="back()"></i>
+        </div>
+        <h2 class="text-center text-success">Creat New Purchase</h2>
+    </div>
+    <div class="card-body">
+        <div class="row g-2 mt-2">
+            <div class="col-md">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="number" 
+                    class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="purchase.pMid" disabled>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Bill No.</label>
+                    <input type="text"
+                    class="mat-form form-control shadow bg-white rounded" 
+                    [(ngModel)]="purchase.billNo">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" 
+                    class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="eDate">
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row g-2 mt-2">
+
+            <div class="col-md">
+                 <div class="row">
+                            <div class="col-8">
+                                <label for="floatingInputGrid">Party</label>
+                            </div>
+                            <div class="col-4">
+                                <h6 class="text-right text-success">{{payable}}</h6>
+                            </div>
+                        </div>
+                <ng-select [items]="partyArr" bindLabel="customerName" bindValue="customerID"
+                    [(ngModel)]="purchase.sAccID" (change)="changeParty($event)" required>
+                </ng-select>
+            </div>
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Bilty No.</label>
+                    <input type="text" 
+                    class="mat-form form-control shadow bg-white rounded" 
+                    [(ngModel)]="purchase.biltyNo">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Goods</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.goods">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Pandi</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.pandi">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Bilty Expenses</label>
+                    <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyExp">
+                </div>
+            </div> -->
+        </div>
+        <!-- <div class="row g-2">
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Remarks</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.remarks">
+                </div>
+
+            </div>
+        </div> -->
+        <div class="row g-2 mt-2">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-3">
+                        <label>Item</label>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">L.P.R: {{lpr}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">stock: {{sBal}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">profit: {{iProfit}}</h6>
+                    </div>
+                </div>
+                <ng-select [items]="itemsArr" bindLabel="itemDescription" 
+                bindValue="itemID" [(ngModel)]="_pSub.itemID"
+                    (change)="changeItem($event)" required 
+                    [searchFn]="customSearchFn" #select
+                    >
+                </ng-select>
+            </div>
+            <div class="col-md" style="display: none;">
+                <div class="form-group">
+                    <label>Lot No</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="_pSub.lotNo">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Unit</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="itemUnit" disabled>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Rate</label>
+                    <input type="number" id="num" (focus)="getTag()"
+                    class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.purchaseRate">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Qty</label>
+                    <input type="number"  id="num1" (focus)="getTag()"
+                    class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.qty">
+                </div>
+            </div>
+            <div class="col-md" style="display: none;">
+                <div class="from-group">
+                    <label>Discount%</label>
+                    <input type="number" id="num2" (focus)="getTag()"
+                     class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.disPer">
+                </div>
+            </div>
+             <div class="col-md">
+                <label>Purchase Type</label>
+               <select  class="form-select mat-form form-control shadow bg-white rounded" aria-label="Default select example"
+               (change)="changeType($event)" >
+                     <option *ngFor="let type of ST"
+                     >{{type.pType}}</option>
+                  </select>  
+                  <!-- <select >
+                    <option *ngFor="let type of ST" 
+                    
+                   >{{type.pType}}</option>
+                  </select> -->
+                  
+                 <!-- <ng-select 
+                [items]="ST" 
+                bindLabel="pType" 
+                bindValue="pTypeId" 
+               [(ngModel)]="_pSub.pTypeId"
+               [ngValue]="_pSub.pTypeId">
+                </ng-select>  -->
+
+
+            </div> 
+            <div class="col-sm-1 float-right mr-0">
+                <button class="btn-act btn-edit btn-block"
+                 (click)="addSmallLine()" style="padding: 20px 40px;" [disabled]="!_pSub.itemDescription">Add</button>
+            </div>
+        </div>
+        <div class="row mt-3">
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-8">
+                <div class="card border-0 shadow">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Qty</th>
+                                    <th>Rate</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let a of purchase.purchasesDetail">
+                                    <td>{{a.itemDescription}}</td>
+                                    <td>{{a.qty}}</td>
+                                    <td>{{a.purchaseRate}}</td>
+                                    <td>{{a.qty*a.purchaseRate-
+                                        (a.qty*a.purchaseRate*a.disPer/100)}}</td> 
+                                      
+                                    <td>{{a.pType}}</td>
+                                    <td style="width: 15%;">
+                                        <div class="btn-group" style="width:100%">
+                                            <!-- EDIT -->
+                                            <button class="btn-act btn-edit" (click)="editLine(a)">
+                                                <img src="./assets/imgs/wedit.svg" height="25px" width="25px"
+                                                    alt="">
+                                            </button>
+                                            <!-- DELETE -->
+                                            <button href="" class="btn-act btn-del" 
+                                            (click)="DeleteLine(a)">
+                                                <img src="./assets/imgs/wdel.svg" height="25px" width="25px" alt="">
+                                            </button>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <div class="card border-0 shadow p-3">
+                    <fieldset>
+                        <legend>Summary</legend>
+                        <div class="summary">
+  <!-- <div class="row" >
+                        <div class="form-group">
+                            <label>Return Amount</label>
+                            <input type="number" class="form-control" [(ngModel)]="retSum">
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Total Bill</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded"
+                             [(ngModel)]="purchase.gSale" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Total Return</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded"
+                             [(ngModel)]="purchase.sReturn" disabled>
+                        </div>
+                    </div>
+                     <div class="row" >
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input type="number"   id="num4" (focus)="getTag()"
+                                class="mat-form form-control shadow bg-white rounded" 
+                                [(ngModel)]="purchase.discountUser" (keyup)="cashReceived($event)">
+                            </div>
+
+                        </div>
+                        
+                    </div> 
+                   <div class="row">
+                        <div class="form-group">
+                            <label>Net Bill</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [ngModel]="netBill" disabled>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Bill Profit</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [(ngModel)]="billProfit" disabled>
+                        </div>
+                    </div>
+                        </div>
+                    </fieldset>
+                    <div class="row">
+                        <!-- <div class="row">
+                            <div class="col-4">
+                                <label>L.P.R</label>
+                                <input type="text" class="mat-form form-control shadow bg-white rounded" disabled [(ngModel)]="lpr">
+                            </div>
+                            <div class="col-4">
+                                <label>Stock</label>
+                                <input type="text" class="mat-form form-control shadow bg-white rounded" disabled [(ngModel)]="sBal">
+                            </div>
+                            <div class="col-4">
+                                <label>Profit</label>
+                                <input type="text" class="mat-form form-control shadow bg-white rounded" disabled [(ngModel)]="iProfit">
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label>Cash Paid</label>
+                            <input type="number" id="num3" (focus)="getTag()"
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [(ngModel)]="purchase.cashPay" (keyup)="cashReceived($event)">
+                        </div>
+                    </div> 
+                  
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</ng-container>
+
+<!-- BNID 4 -->
+<ng-container *ngIf="bnid===4">
+    <!-- <h1>BNID 4</h1> -->
+    <div class="card shadow border-0">
+   
+    <div class="card-body">
+        <div class="row g-2 mt-2">
+            <div class="col-md">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="number" 
+                    class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="purchase.pMid" disabled>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Bill No.</label>
+                    <input type="text"
+                    class="mat-form form-control shadow bg-white rounded" 
+                    [(ngModel)]="purchase.billNo">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" 
+                    class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="eDate">
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row g-2 mt-2">
+
+            <div class="col-md">
+                 <div class="row">
+                            <div class="col-8">
+                                <label for="floatingInputGrid">Daying Name</label>
+                            </div>
+                            <div class="col-4">
+                                <h6 class="text-right text-success">{{payable}}</h6>
+                            </div>
+                        </div>
+                <ng-select [items]="partyArr" bindLabel="customerName" bindValue="customerID"
+                    [(ngModel)]="purchase.sAccID" (change)="changeParty($event)" required>
+                </ng-select>
+            </div>
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Bilty No.</label>
+                    <input type="text" 
+                    class="mat-form form-control shadow bg-white rounded" 
+                    [(ngModel)]="purchase.biltyNo">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Goods</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.goods">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Pandi</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.pandi">
+                </div>
+            </div> -->
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Bilty Expenses</label>
+                    <input type="number" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.biltyExp">
+                </div>
+            </div> -->
+        </div>
+        <!-- <div class="row g-2">
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Remarks</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="purchase.remarks">
+                </div>
+
+            </div>
+        </div> -->
+        <div class="row g-2 mt-2">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-3">
+                        <label>Quality </label>
+                    </div>
+                    <!-- <div class="col-3">
+                        <h6 class="text-right text-success">L.P.R: {{lpr}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">stock: {{sBal}}</h6>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="text-right text-success">profit: {{iProfit}}</h6>
+                    </div> -->
+                </div>
+                <ng-select [items]="itemsArr" bindLabel="itemDescription" 
+                bindValue="itemID" [(ngModel)]="_pSub.itemID"
+                    (change)="changeItem($event)" required 
+                    [searchFn]="customSearchFn" #select
+                    >
+                </ng-select>
+            </div>
+            <div class="col-md" >
+                <div class="form-group">
+                    <label>Lot No</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded"
+                     [(ngModel)]="_pSub.lotNo">
+                </div>
+            </div>
+            <!-- <div class="col-md">
+                <div class="form-group">
+                    <label>Unit</label>
+                    <input type="text" class="mat-form form-control shadow bg-white rounded" [(ngModel)]="itemUnit" disabled>
+                </div>
+            </div> -->
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Than</label>
+                    <input type="number" id="num" (focus)="getTag()"
+                    class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.packet">
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label>Mtr</label>
+                    <input type="number"  id="num1" 
+                    class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.qty">
+                </div>
+            </div>
+            <!-- <div class="col-md" style="display: none;">
+                <div class="from-group">
+                    <label>Discount%</label>
+                    <input type="number" id="num2" (focus)="getTag()"
+                     class="mat-form form-control shadow bg-white rounded" [(ngModel)]="_pSub.disPer">
+                </div>
+            </div> -->
+             <div class="col-md">
+                <label>Purchase Type</label>
+               <select  class="form-select mat-form form-control shadow bg-white rounded" aria-label="Default select example"
+               (change)="changeType($event)" >
+                     <option *ngFor="let type of ST"
+                     >{{type.pType}}</option>
+                  </select>  
+                  <!-- <select >
+                    <option *ngFor="let type of ST" 
+                    
+                   >{{type.pType}}</option>
+                  </select> -->
+                  
+                 <!-- <ng-select 
+                [items]="ST" 
+                bindLabel="pType" 
+                bindValue="pTypeId" 
+               [(ngModel)]="_pSub.pTypeId"
+               [ngValue]="_pSub.pTypeId">
+                </ng-select>  -->
+
+
+            </div> 
+            <div class="col-sm-1 float-right mr-0">
+                <button class="btn-act btn-edit btn-block"
+                 (click)="addSmallLine4()" style="padding: 20px 40px;" [disabled]="!_pSub.itemDescription">Add</button>
+            </div>
+        </div>
+        <div class="row mt-3">
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-sm-12">
+                <div class="card border-0 shadow">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Than</th>
+                                    <th>Mtr</th>
+                                    <!-- <th>Rate</th>
+                                    <th>Amount</th> -->
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let a of purchase.purchasesDetail">
+                                    <td>{{a.itemDescription}}</td>
+                                    <td>{{a.packet}}</td>
+                                    <td>{{a.qty}}</td>
+                                    <!-- <td>{{a.purchaseRate}}</td>
+                                    <td>{{a.qty*a.purchaseRate-
+                                        (a.qty*a.purchaseRate*a.disPer/100)}}</td> 
+                                       -->
+                                    <td>{{a.pType}}</td>
+                                    <td style="width: 15%;">
+                                        <div class="btn-group" style="width:100%">
+                                            <!-- EDIT -->
+                                            <button class="btn btn-primary" (click)="editLine(a)">
+                                                <img src="./assets/imgs/wedit.svg" height="25px" width="25px"
+                                                    alt="">
+                                            </button>
+                                            <!-- DELETE -->
+                                            <button href="" class="btn btn-danger" 
+                                            (click)="DeleteLine(a)">
+                                                <img src="./assets/imgs/wdel.svg" height="25px" width="25px" alt="">
+                                            </button>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <!-- <div class="col-sm-4 ">
+                <div class="card border-0 shadow p-3">
+                    <fieldset>
+                        <legend>Summary</legend>
+                        <div class="summary">
+ 
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Total Bill</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded"
+                             [(ngModel)]="purchase.gSale" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Total Return</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded"
+                             [(ngModel)]="purchase.sReturn" disabled>
+                        </div>
+                    </div>
+                     <div class="row" >
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input type="number"   id="num4" (focus)="getTag()"
+                                class="mat-form form-control shadow bg-white rounded" 
+                                [(ngModel)]="purchase.discountUser" (keyup)="cashReceived($event)">
+                            </div>
+
+                        </div>
+                        
+                    </div> 
+                   <div class="row">
+                        <div class="form-group">
+                            <label>Net Bill</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [ngModel]="netBill" disabled>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Bill Profit</label>
+                            <input type="number" 
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [(ngModel)]="billProfit" disabled>
+                        </div>
+                    </div>
+                        </div>
+                    </fieldset>
+                    <div class="row">
+                       
+                        <div class="form-group">
+                            <label>Cash Paid</label>
+                            <input type="number" id="num3" (focus)="getTag()"
+                            class="mat-form form-control shadow bg-white rounded" 
+                            [(ngModel)]="purchase.cashPay" (keyup)="cashReceived($event)">
+                        </div>
+                    </div> 
+                  
+                    
+                </div>
+
+            </div> -->
+        </div>
+    </div>
+</div>
+</ng-container>
+        </div>
+
+
+
+
